@@ -2,13 +2,18 @@ module results4
 
 function success = |value| {
   return |success, failure| {
-    success(value)
+    return success(value)
   }
 }
 function failure = |message| {
   return |success, failure| {
-    failure(message)
+    return failure(message)
   }
+}
+
+function checkIsString = |item, errMessage|-> match {
+  when item oftype String.class then success(item)
+  otherwise failure(errMessage)
 }
 
 function main = |args| {
@@ -27,6 +32,12 @@ function main = |args| {
   emailChecker("foo@bar.com")(onSuccess, onFailure)
   emailChecker("http://foo.bar.com")(onSuccess, onFailure)
   emailChecker("+330664932112")(onSuccess, onFailure)
+
+
+  println(
+    checkIsString(42, "not a string")(|value| -> value, |err| -> err)
+  )
+
 }
 
 
