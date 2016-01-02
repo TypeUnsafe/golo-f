@@ -1,4 +1,4 @@
-module results
+module results2
 
 ----
 ## success structure
@@ -19,22 +19,6 @@ augment failure {
   function message = |this| -> this: _errorMessage()
 }
 
-augmentation bind = {
-  function bind = |this, success, failure| {
-    case {
-      when this oftype results.types.success.class {
-        success(this: value())
-      }
-      otherwise {
-        failure(this: message())
-      }
-    }
-  }
-}
-augment failure with bind
-augment success with bind
-
-
 ----
 ## result structure
 ----
@@ -44,11 +28,15 @@ struct result = {
 augment result {
   function success = |this, value| {
     this: _success(success(value))
-    return this: _success()
+    return |success, failure| {
+      success(this: _success(): value())
+    }
   }
   function failure = |this, message| {
     this: _failure(failure(message))
-    return this: _failure()
+    return |success, failure| {
+      failure(this: _failure():message())
+    }
   }
 }
 
@@ -64,26 +52,10 @@ function main = |args| {
   let onSuccess = |value| -> println("Mail sent to "+value)
   let onFailure = |errorMessage| -> println("Error message logged: "+errorMessage)
 
-  emailChecker("foobar.com")
-    : bind(
-      success= onSuccess,
-      failure= onFailure
-    )
-  emailChecker("foo@bar.com")
-    : bind(
-      success= onSuccess,
-      failure= onFailure
-    )
-  emailChecker("http://foo.bar.com")
-    : bind(
-      success= onSuccess,
-      failure= onFailure
-    )
-  emailChecker("+330664932112")
-    : bind(
-      success= onSuccess,
-      failure= onFailure
-    )
+  emailChecker("foo@bar.com")(onSuccess, onFailure)
+  emailChecker("http://foo.bar.com")(onSuccess, onFailure)
+  emailChecker("+330664932112")(onSuccess, onFailure)
+  #emailChecker("foobar.com")(success=onSuccess, failure=onFailure)
 }
 
 
