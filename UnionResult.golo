@@ -9,10 +9,10 @@ augment Result {
   function bind = |this, success, failure| {
     case {
       when this oftype types.Result$Success.class {
-        success(this: value())
+        return success(this: value())
       }
       otherwise {
-        failure(this: value())
+        return failure(this: value())
       }
     }
   }
