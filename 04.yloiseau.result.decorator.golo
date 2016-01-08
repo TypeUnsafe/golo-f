@@ -1,4 +1,4 @@
-module ifPresentAndorElseGet
+module mapAndMapError
 
 import gololang.error.Errors
 
