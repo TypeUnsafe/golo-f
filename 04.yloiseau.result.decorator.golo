@@ -4,8 +4,6 @@ import gololang.error.Errors
 
 @result
 function toInt = |sParam| {
-  println("--------------------")
-  println("-> sParam: " + sParam)
   return java.lang.Integer.parseInt(sParam: trim())
 }
 
