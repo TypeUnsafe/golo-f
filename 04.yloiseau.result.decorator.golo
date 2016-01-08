@@ -8,13 +8,6 @@ function toInt = |sParam| {
 }
 
 function main = |args| {
-  println(
-    toInt("hello")
-  )
-
-  println(
-    toInt("42")
-  )
 
   toInt("hello"): map(|value| {
     println("value: " + value)
