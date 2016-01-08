@@ -41,7 +41,6 @@ augment Option {
       success=|some| -> some: value(),
       failure=|valueIfError| -> valueIfError
     )
-
 }
 
 function toInt = |sParam| {
